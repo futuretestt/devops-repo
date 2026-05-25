@@ -1,0 +1,26 @@
+name: My First DevOps CI-CD Pipeline
+
+# 1. امتى الـ Pipeline دي تشتغل؟ (لما يحصل push على فرع main)
+on:
+  push:
+    branches: [ "main" ]
+
+# 2. إيه الخطوات اللي هتعملها؟
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest # جيت هاب هيفتح سيرفر أوبونتو مجاني في السحاب يشغل الكلام ده
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Run Code Linting & Tests
+      run: |
+        echo "Running Automated Tests..."
+        echo "All Code Tests Passed Successfully! ✅"
+
+    - name: Simulate Docker Build
+      run: |
+        echo "Building Docker Image version v1..."
+        echo "Docker Image Built Successfully! 🐳"
+
