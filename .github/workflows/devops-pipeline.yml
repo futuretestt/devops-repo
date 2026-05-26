@@ -1,26 +1,23 @@
-name: My First DevOps CI-CD Pipeline
+name: CI-CD Pipeline to Docker Hub
 
-# 1. امتى الـ Pipeline دي تشتغل؟ (لما يحصل push على فرع main)
 on:
   push:
     branches: [ "main" ]
 
-# 2. إيه الخطوات اللي هتعملها؟
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest # جيت هاب هيفتح سيرفر أوبونتو مجاني في السحاب يشغل الكلام ده
+  build-and-push:
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    - name: Run Code Linting & Tests
-      run: |
-        echo "Running Automated Tests..."
-        echo "All Code Tests Passed Successfully! ✅"
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-    - name: Simulate Docker Build
-      run: |
-        echo "Building Docker Image version v1..."
-        echo "Docker Image Built Successfully! 🐳"
+    - name: Build Docker Image
+      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/my-custom-nginx:latest .
+
+    - name: Push Image to Docker Hub
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-custom-nginx:latest
 
